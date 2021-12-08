@@ -1,0 +1,5 @@
+celery -A db_monitor worker --app=db_monitor -l info -P eventlet
+celery -A db_monitor worker -l info -P eventlet
+
+celery -A db_monitor beat --app=db_monitor -l info
+celery -A db_monitor beat -l info
