@@ -768,21 +768,44 @@ def ApiSetupLog(request):
 from .models import AlarmInfo
 from django.http import JsonResponse
 
+from datetime import timedelta
+
+from utils.tools import get_zero_time
+
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def ExportAlarmInfo(request):
     export_alarm_info = []
-    all_alarm_info = AlarmInfo.objects.all()
-    for alarm_info in all_alarm_info:
+    day_field = request.query_params.get('day', None)
+    if day_field and day_field != 'undefined':
+        if day_field == '1':
+            # 获取昨天的00:00:00点到23:59:59
+            zero_yesterday, now = get_zero_time(int(day_field))
+            last_yesterday = zero_yesterday + timedelta(hours=23, minutes=59, seconds=59)
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_yesterday, alarm_time__lte=last_yesterday)
+        elif day_field == '7':
+            # 获取7天前的00:00:00
+            zero_seven, now = get_zero_time(int(day_field))
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_seven, alarm_time__lte=now)
+        elif day_field == '30':
+            # 获取30天前的00:00:00
+            zero_thirty, now = get_zero_time(int(day_field))
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_thirty, alarm_time__lte=now)
+    else:
+        alarm_info = AlarmInfo.objects.all()
+    for each_alarm_info in alarm_info:
         export_alarm_info.append(
             {
-                'tags': alarm_info.tags,
-                'url': alarm_info.url,
-                'alarm_type': alarm_info.alarm_type,
-                'alarm_header': alarm_info.alarm_header,
-                'alarm_content': alarm_info.alarm_content,
-                'alarm_time': alarm_info.alarm_time
+                'tags': each_alarm_info.tags,
+                'url': each_alarm_info.url,
+                'alarm_type': each_alarm_info.alarm_type,
+                'alarm_header': each_alarm_info.alarm_header,
+                'alarm_content': each_alarm_info.alarm_content,
+                'alarm_time': each_alarm_info.alarm_time
             }
         )
     return JsonResponse(export_alarm_info, safe=False)
