@@ -88,11 +88,14 @@ def check_mysql(tags, mysql_params):
         archive_table(tags, 'mysql_stat')
 
 
-if __name__ =='__main__':
-    mysql_params = {
-        'host' : '192.168.48.50',
-        'port':3306,
-        'user':'root',
-        'password':'mysqld'
-    }
+# if __name__ =='__main__':
+    # mysql_params = {
+    #     'host' : '119.29.139.149',
+    #     'port':3306,
+    #     'user':'root',
+    #     'user_os':'root',
+    #     'password_os':'1234',
+    #     'password':'1234',
+    #     'sshport_os':22
+    # }
     # check_mysql('mysql50',mysql_params)

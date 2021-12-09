@@ -51,7 +51,7 @@ def check_alarm():
                 checklog.logger.info("{}:告警检查正常".format(alarm_name))
             else:
                 for each in check_res:
-                    tags,url,alarm_content = each
+                    tags, url,alarm_content = each
                     alarm_title = tags + ':' + alarm_name
                     checklog.logger.warning(alarm_content)
 

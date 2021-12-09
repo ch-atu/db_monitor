@@ -157,35 +157,57 @@ STATICFILES_DIRS = (
 )
 
 # logging
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '[argus] %(levelname)s %(asctime)s %(module)s %(message)s'
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'tasks': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'asset': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+# 数据采集日志
+CHECK_LOG_DIR = os.path.join(BASE_DIR, 'logs')
+# 控制台日志存放目录
+CONSOLE_LOG = os.path.join(BASE_DIR, 'logs')
+# 配置日志
+# 这么配置日志最终celery异步执行时间没打印出来
+# LOGGING = {
+#     'version': 1,  # 指定版本，目前也就一个版本
+#     'disable_existing_loggers': False,  # 表示是否禁用所有的已经存在的日志配置
+#     'formatters': {
+#         # 日志格式
+#         'standard': {
+#             'format': '[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s]- %(message)s'},
+#         'simple': {  # 简单格式
+#             'format': '%(levelname)s %(message)s'
+#         },
+#     },
+#     # 暂不使用过滤
+#     'filters': {
+#     },
+#     # 定义具体处理日志的方式
+#     # 用来定义具体处理日志的方式，可以定义多种
+#     # "default"就是默认方式，"console"就是打印到控制台方式。file是写入到文件的方式，注意使用的class不同
+#     'handlers': {
+#         # 默认记录所有日志
+#         'default': {
+#             'level': 'INFO',
+#             'class': 'logging.handlers.RotatingFileHandler',
+#             'filename': CONSOLE_LOG + '/django-web.log',  # 日志的存放路径
+#             'maxBytes': 1024 * 1024 * 5,  # 文件大小
+#             'backupCount': 5,  # 备份数
+#             'formatter': 'standard',  # 输出格式
+#             'encoding': 'utf-8',  # 设置默认编码，否则打印出来汉字乱码
+#         },
+#         # 控制台输出
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'standard',
+#         },
+#     },
+#     # 配置用哪几种 handlers 来处理日志
+#     'loggers': {
+#         # 类型 为 django 处理所有类型的日志， 默认调用
+#         'django': {
+#             'handlers': ['default', 'console'],
+#             'level': 'INFO',
+#             'propagate': True  # 可以基于每个记录器控制该传播。 如果您不希望特定记录器传播到其父项，则可以关闭此行为。
+#         },
+#     }
+# }
 
 # 表格table
 PAGINATION_SETTINGS = {
@@ -305,8 +327,7 @@ SWAGGER_SETTINGS = {
     'VALIDATOR_URL': None,
 }
 
-# 数据采集日志
-CHECK_LOG_DIR = os.path.join(BASE_DIR, 'logs')
+
 
 # send email
 IS_SEND_EMAIL = 0

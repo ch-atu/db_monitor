@@ -777,8 +777,13 @@ from utils.tools import get_zero_time
 # @permission_classes([IsAuthenticated])
 def ExportAlarmInfo(request):
     export_alarm_info = []
+    alarm_info = []
     day_field = request.query_params.get('day', None)
     if day_field and day_field != 'undefined':
+        if day_field == '0':
+            zero_today, now = get_zero_time(int(day_field))
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_today, alarm_time__lte=now)
         if day_field == '1':
             # 获取昨天的00:00:00点到23:59:59
             zero_yesterday, now = get_zero_time(int(day_field))
@@ -795,8 +800,15 @@ def ExportAlarmInfo(request):
             zero_thirty, now = get_zero_time(int(day_field))
 
             alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_thirty, alarm_time__lte=now)
+        elif day_field == '365':
+            # 获取一年前的00:00:00
+            zero_before_year, now = get_zero_time(int(day_field))
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_before_year, alarm_time__lte=now)
     else:
-        alarm_info = AlarmInfo.objects.all()
+        zero_today, now = get_zero_time(0)
+
+        alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_today, alarm_time__lte=now)
     for each_alarm_info in alarm_info:
         export_alarm_info.append(
             {
