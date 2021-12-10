@@ -9,8 +9,6 @@ Source Database       : db_monitor_dev
 Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
-
-Date: 2020-01-19 17:07:50
 */
 
 --INSERT INTO `alarm_conf` VALUES (1, 1, 'Oracle数据库通断告警', '>=', 1, '连续中断次数', 'oracle_stat', 'select tags,\n       concat(host, \':\', port, \'/\', service_name) url,  \n       concat(tags,\n              \':Oracle数据库通断告警\',\n              \'\\n 告警时间：\',\n              current_timestamp(),\n              \' \\n 数据库url: \',\n              host,\n              \':\',\n              port,\n              \'/\',\n              service_name\n             ) content\n  from oracle_stat\n where status = 1\n and %s>0\n and %s', 'oracle_list', 'alarm_connect');
