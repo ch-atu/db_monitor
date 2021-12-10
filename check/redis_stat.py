@@ -60,7 +60,7 @@ class RedisStat(object):
 
     # 配置信息
     def get_redis_config(self):
-        config =  self.conn.config_get()
+        config = self.conn.config_get()
         for conf_name in CONFIG_KEYS:
             conf_val = config.get(conf_name)
             self.res['config'][conf_name] = conf_val
