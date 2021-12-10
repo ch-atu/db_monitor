@@ -1,0 +1,3 @@
+==报错SIGALRM和setitmer错误==
+
+定位到源码，注释掉if下的两行，改为pass
