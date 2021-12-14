@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 @timeout_decorator.timeout(30)
-def check_linux(tags,linux_params):
+def check_linux(tags, linux_params):
     check_time = datetime.now()
     host = linux_params['hostname']
     port = linux_params['port']
@@ -122,11 +122,11 @@ if __name__ == '__main__':
     print(datetime.now())
     test = "测试数据：'{str}', {num}"
     result_format = test.format(str='hello!!', num='123')
-    tags = 'test'
+    tags = '腾讯云'
     linux_params = {
-        'hostname': '192.168.16.160',
+        'hostname': '119.29.139.149',
         'port': '22',
-        'username': 'root',
-        'password': 'abc@123'
+        'username': 'ubuntu',
+        'password': 'ch2020...'
     }
-    # check_linux(tags=tags, linux_params=linux_params)
+    check_linux(tags=tags, linux_params=linux_params)

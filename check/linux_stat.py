@@ -83,12 +83,12 @@ class LinuxStat(LinuxBase):
     def get_host_info(self):
         # get_hostname mysql50
         command = 'hostname'
-        res = super().exec_command(command,self.conn)
+        res = super().exec_command(command, self.conn)
         hostname = res.readlines()[0]
         # get ostype,version,frame Linux 2.6.32-431.el6.x86_64
         command = 'uname -a'
-        res = super().exec_command(command,self.conn)
-        res =  res.readlines()[0]
+        res = super().exec_command(command, self.conn)
+        res = res.readlines()[0]
         # 获取操作系统类型
         ostype = res.split(' ')[0]
         # 获取内核信息
@@ -181,7 +181,7 @@ class LinuxStat(LinuxBase):
             'cpu_speed': cpu_speed,  # cpu速率
             'cpu_mode': cpu_mode,  # cpu型号
             'cpu_cache': cpu_cache,  # cpu缓存
-            'virtual':virtual  # cpu虚拟
+            'virtual': virtual  # cpu虚拟
         }
 
     def get_memtotal(self):
@@ -213,7 +213,7 @@ class LinuxStat(LinuxBase):
                     ip_list.append(ip)
         ipinfo = ','.join(ip_list)
         return {
-            'ipinfo':ipinfo
+            'ipinfo': ipinfo
         }
 
     def get_linux_stat(self):
