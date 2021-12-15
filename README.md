@@ -42,10 +42,10 @@ create database db_monitor;
 #### 5. 安装依赖包
 pip install -r requirements.txt
 
-#### settings配置
+#### 6.settings配置
 --MySQL数据库：
 
-DATABASES = {  
+>DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
 		'NAME': 'db_monitor',  
@@ -58,26 +58,25 @@ DATABASES = {
 
 --Redis：
 
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
-
+>CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
 CELERY_BROKER_URL = 'redis://localhost:6379/2'
 
 
-#### 创建数据库
-python manage.py makemigrations
+#### 7.创建数据库
+>python manage.py makemigrations
 
-python manage.py migrate
+>python manage.py migrate
 
-python manage.py createsuperuser(创建登录用户)
+>python manage.py createsuperuser(创建登录用户)
 
-#### 执行数据库脚本
+#### 8.执行数据库脚本
 
-@install/initdata.sql
+>@install/initdata.sql
 
-### 6. 启动/停止
-python manage.py runserver 0.0.0.0:8000 #建议使用固定IP地址启动
+### 9.启动/停止
+>python manage.py runserver 0.0.0.0:8000 #建议使用固定IP地址启动
 
-### 7.celery的启动
+### 10.celery的启动
 参考celery_run.txt
 
 也可以使用脚本启动/关闭：
@@ -86,7 +85,7 @@ celery: sh celery_start[shutdown].sh
 
 django: sh web_start[shutdown].sh
 
-关于日志：
+### 11.关于日志：
 
 celery日志：logs/celery-worker.log & logs/celery-beat.log
 
