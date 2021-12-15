@@ -79,7 +79,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379/2'
 ### 10.celery的启动
 参考celery_run.txt
 
-也可以使用脚本启动/关闭：
+注：也可以使用脚本启动/关闭[不推荐]：
 
 celery: sh celery_start[shutdown].sh
 
