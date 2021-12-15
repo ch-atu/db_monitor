@@ -25,5 +25,5 @@
 
 configure.yaml
 celerybeat-schedule
-
+dump.rdb
 
