@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import AlertLog,AlarmConf,AlarmInfo,SetupLog
+from system.models import AlertLog,AlarmConf,AlarmInfo,SetupLog
 
 class AlertLogSerializer(serializers.ModelSerializer):
     class Meta:

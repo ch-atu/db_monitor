@@ -1,22 +1,18 @@
-from django.shortcuts import render
-
 import json
 import logging
 from rest_framework.views import APIView
-from rest_framework import permissions
 from rest_framework.authtoken.models import Token
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import HttpResponse
 from django.contrib.auth.backends import ModelBackend
 from system.models import Users
 from django.db.models import Q
-from .models import AlertLog, AlarmConf, AlarmInfo, SetupLog
+from system.models import AlertLog, AlarmConf, AlarmInfo
 from rest_framework import permissions
 from rest_framework import generics
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import AlertLogSerializer, AlarmConfSerializer, AlarmInfoSerializer, SetupLogSerializer
+from apps.system.serializers import AlertLogSerializer, AlarmConfSerializer, AlarmInfoSerializer, SetupLogSerializer
 from rest_framework.decorators import api_view, permission_classes
-from system.tasks import OracleRacInstall
 from rest_framework.permissions import IsAuthenticated
 from utils.tools import mysql_django_query
 from rest_framework.renderers import JSONRenderer
@@ -765,7 +761,7 @@ def ApiSetupLog(request):
 
 
 # 日志导出
-from .models import AlarmInfo
+from system.models import AlarmInfo
 from django.http import JsonResponse
 
 from datetime import timedelta

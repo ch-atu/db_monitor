@@ -26,4 +26,4 @@
 configure.yaml
 celerybeat-schedule
 dump.rdb
-
+apps/*/migrations/*
