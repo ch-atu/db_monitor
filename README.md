@@ -27,15 +27,15 @@
     
 
 ## 安装部署
-### 1. 安装python3.6(略)
+### 1. 安装python3.6以上(建议)
 
-### 2. 安装mysql5.7(略)
+### 2. 安装mysql5.7
 
 注意字符集：utf-8
 
 create database db_monitor; 
 
-### 3. 安装redis3.2(略)
+### 3. 安装redis3.2
 
 ### 4. 项目配置
 
@@ -77,11 +77,8 @@ python manage.py createsuperuser(创建登录用户)
 ### 6. 启动/停止
 python manage.py runserver 0.0.0.0:8000 #建议使用固定IP地址启动
 
-celery –A db_monitor worker –l info或
-celery -A db_monitor worker --app=db_monitor -l info -P eventlet
-
-celery –A db_monitor beat –l info或
-celery -A db_monitor beat --app=db_monitor -l info
+### 7.celery的启动
+参考celery_run.txt
 
 也可以使用脚本启动/关闭：
 
