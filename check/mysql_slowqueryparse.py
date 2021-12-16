@@ -1,12 +1,12 @@
 # encoding:utf-8
 
 import re
-from utils.tools import mysql_exec,mysql_query,now
+from utils.tools import mysql_exec, mysql_query, now
 from utils.mysql_do import Mysql_Do
 from utils.linux_base import LinuxBase
 
 
-def save_data(host,tags,SQL_META):
+def save_data(host, tags, SQL_META):
     check_time = now()
     if SQL_META:
         start_time = SQL_META['start_time']
@@ -27,38 +27,38 @@ def save_data(host,tags,SQL_META):
 
             values = (
                 host, tags, start_time, host_client, db_name, sql_text, query_time, lock_time,
-                rows_examined,rows_sent, thread_id,check_time)
+                rows_examined, rows_sent, thread_id, check_time)
 
             mysql_exec(sql, values)
 
-def parse_mysql_slowquery_logs(tags,host,log_stream):
+
+def parse_mysql_slowquery_logs(tags, host, log_stream):
     ## User@Host: root[root] @ localhost [127.0.0.1]  Id: 626474
     # Query_time: 0.230439  Lock_time: 0.000000 Rows_sent: 0  Rows_examined: 0
-    #use dtops_test;
+    # use dtops_test;
 
     SQL_META = {}
 
     reg_ts = re.compile('^SET timestamp=\d+;$')
 
-
     reg_time = re.compile('^# Time: ((\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.*?$)|((\d\d\d\d\d\d (?:\d| )\d:\d\d:\d\d)$))')
     # reg_host = re.compile('^# User@Host: (.+) @ (.*) \[(.*)\](?:  Id: (\d+))?$')
     reg_host = re.compile('^# User@Host:\s+(.*\])(?:\s+Id:\s+(\d+))?$')
-    reg_querytime = re.compile('^# Query_time:\s+(\d+\.\d+)\s+Lock_time:\s+(\d+\.\d+)\s+Rows_sent:\s+(\d+)\s+Rows_examined:\s+(\d+)')
+    reg_querytime = re.compile(
+        '^# Query_time:\s+(\d+\.\d+)\s+Lock_time:\s+(\d+\.\d+)\s+Rows_sent:\s+(\d+)\s+Rows_examined:\s+(\d+)')
     reg_db = re.compile('^use ([^;]*);$')
     reg_schema = re.compile('^# Schema: (\w+)')
     reg_ignore = re.compile('^# Bytes_sent:')
 
-
-    #state 0: before match
-    #state 1: get time
-    #state 2: get host
-    #state 3: get query time
-    #state 4: match sql
+    # state 0: before match
+    # state 1: get time
+    # state 2: get host
+    # state 3: get query time
+    # state 4: match sql
     sql_lines = []
     state = 0
     for log_l, f_pos in log_stream:
-        log_l = log_l.decode(encoding='utf-8',errors="ignore")
+        log_l = log_l.decode(encoding='utf-8', errors="ignore")
         if state == 0:
             m = reg_time.match(log_l)
             if m:
@@ -93,7 +93,7 @@ def parse_mysql_slowquery_logs(tags,host,log_stream):
                 if len(sql_lines) > 0:
                     sql_text = "".join(sql_lines).strip()
                     SQL_META['sql_text'] = sql_text
-                    save_data(host,tags,SQL_META)
+                    save_data(host, tags, SQL_META)
 
                 sql_lines = []
                 SQL_META['start_time'] = query_start_time
@@ -111,7 +111,7 @@ def parse_mysql_slowquery_logs(tags,host,log_stream):
 
                     sql_text = "".join(sql_lines)
                     SQL_META['sql_text'] = sql_text.strip()
-                    save_data(host,tags,SQL_META)
+                    save_data(host, tags, SQL_META)
 
                     SQL_META['host'] = host
                     SQL_META['thread_id'] = thread_id
@@ -120,7 +120,6 @@ def parse_mysql_slowquery_logs(tags,host,log_stream):
                     # /usr/sbin/mysqld, Version: 5.6.27-0ubuntu0.14.04.1 ((Ubuntu)). started with:
                     # Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
                     # Time                 Id Command    Argument
-
 
                     if reg_ts.match(log_l) or log_l == '':
                         continue
@@ -134,16 +133,16 @@ def parse_mysql_slowquery_logs(tags,host,log_stream):
                                 continue
                             sql_lines.append(log_l)
 
-        #end of file
+        # end of file
         if log_l == '':
             return f_pos
 
 
-def get_mysql_slowquery(tags,mysql_params,linux_params):
+def get_mysql_slowquery(tags, mysql_params, linux_params):
     host = mysql_params['host']
     # slow query log location
     sql = "select slowquery_log,slowquery_log_seek from mysql_list where tags='{}' ".format(tags)
-    slowquery_log,slowquery_log_seek = mysql_query(sql)[0]
+    slowquery_log, slowquery_log_seek = mysql_query(sql)[0]
     if not slowquery_log:
         slowquery_log = Mysql_Do(mysql_params).get_para('slow_query_log_file')
         slowquery_log_seek = 0
@@ -155,21 +154,23 @@ def get_mysql_slowquery(tags,mysql_params,linux_params):
         slowquery_log_seek = parse_mysql_slowquery_logs(tags, host, slowquery_content)
         # update alert log info to mysqlinfo
         sql = "update mysql_list set slowquery_log='{}',slowquery_log_seek={} where tags='{}' ".format(slowquery_log,
-                                                                                                       slowquery_log_seek,tags)
-        sql = sql.replace('None','NULL')
+                                                                                                       slowquery_log_seek,
+                                                                                                       tags)
+        sql = sql.replace('None', 'NULL')
         mysql_exec(sql)
 
-if __name__ =='__main__':
+
+if __name__ == '__main__':
     mysql_params = {
-        'host': '192.168.48.51',
+        'host': '119.29.139.149',
         'port': 3306,
         'user': 'root',
-        'password': 'mysqld'
+        'password': '1234'
     }
-    linux_params =   {
-        'hostname': '192.168.48.51',
+    linux_params = {
+        'hostname': '119.29.139.149',
         'port': 22,
-        'username':'root',
-        'password':'mysqld'
+        'username': 'ubuntu',
+        'password': 'ch2020...'
     }
-    get_mysql_slowquery('mysql-master',mysql_params,linux_params)
+    get_mysql_slowquery('腾讯云', mysql_params, linux_params)

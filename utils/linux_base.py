@@ -32,7 +32,7 @@ class LinuxBase(object):
             return ssh_client,sftp_client
         except Exception as e:
             print("linux connect error:{}".format(e))
-            return(None,None)
+            return None, None
     # read all of file content
 
     def readfile(self,file,seek=0):
@@ -51,7 +51,7 @@ class LinuxBase(object):
             yield b'', remote_file.tell()
         except Exception as e:
             print("read file error")
-            return(None,None)
+            return None, None
 
     # read last n of file content
     def readfile_n(self,file,num):
@@ -96,4 +96,17 @@ class LinuxBase(object):
             sftp_client.get(remote_file, local_file)
         except Exception as e:
             print(e)
+
+
+# if __name__ == '__main__':
+#     linux_params = {
+#         'hostname': '119.29.139.149',
+#         'port': 22,
+#         'username': 'ubuntu',
+#         'password': 'ch2020...'
+#     }
+#     l = LinuxBase(params=linux_params)
+#     print(l.readfile(file='/var/log/mysql/error.log', seek=52395))
+
+
 

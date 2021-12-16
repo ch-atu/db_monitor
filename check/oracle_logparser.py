@@ -124,25 +124,25 @@ def get_oracle_alert(tags,db_conn,oracle_params,linux_params):
     mysql_exec(sql)
 
 
-if __name__ =='__main__':
-    oracle_params = {
-        'host' : '192.168.48.60',
-        'port':1521,
-        'service_name':'pdb1',
-        'user':'dbmon',
-        'password':'oracle',
-        'service_name_cdb':'orcl19c',
-        'user_cdb':'c##dbmon',
-        'password_cdb':'oracle',
-        'db_version' : 'Oracle12c'
-    }
-    linux_params = {
-        'hostname': '192.168.48.60',
-        'port': 22,
-        'username':'root',
-        'password':'oracle'
-    }
-    db_conn = get_connection(oracle_params)
-
-    get_oracle_alert('19cpdb1',db_conn,oracle_params,linux_params)
+# if __name__ =='__main__':
+#     oracle_params = {
+#         'host' : '192.168.48.60',
+#         'port':1521,
+#         'service_name':'pdb1',
+#         'user':'dbmon',
+#         'password':'oracle',
+#         'service_name_cdb':'orcl19c',
+#         'user_cdb':'c##dbmon',
+#         'password_cdb':'oracle',
+#         'db_version' : 'Oracle12c'
+#     }
+#     linux_params = {
+#         'hostname': '192.168.48.60',
+#         'port': 22,
+#         'username':'root',
+#         'password':'oracle'
+#     }
+#     db_conn = get_connection(oracle_params)
+#
+#     get_oracle_alert('19cpdb1',db_conn,oracle_params,linux_params)
 

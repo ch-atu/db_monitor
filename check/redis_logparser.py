@@ -116,21 +116,21 @@ def get_redis_log(tags,redis_params,linux_params):
         sql = "update redis_list set log='{}',log_seek={} where tags='{}' ".format(log, log_seek, tags)
         mysql_exec(sql)
 
-if __name__ =='__main__':
-    redis_params = {
-        'host': '192.168.48.60',
-        'port': 6379,
-        'version': '',
-        'password': '',
-        'user_os': 'root',
-        'password_os': 'oracle',
-        'sshport_os': 22
-    }
-
-    linux_params =   {
-        'hostname': '192.168.48.60',
-        'port': 22,
-        'username':'root',
-        'password':'oracle'
-    }
-    get_redis_log('redis-6379',redis_params,linux_params)
+# if __name__ =='__main__':
+#     redis_params = {
+#         'host': '192.168.48.60',
+#         'port': 6379,
+#         'version': '',
+#         'password': '',
+#         'user_os': 'root',
+#         'password_os': 'oracle',
+#         'sshport_os': 22
+#     }
+#
+#     linux_params =   {
+#         'hostname': '192.168.48.60',
+#         'port': 22,
+#         'username':'root',
+#         'password':'oracle'
+#     }
+#     get_redis_log('redis-6379',redis_params,linux_params)
