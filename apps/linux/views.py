@@ -119,21 +119,17 @@ class ApiLinuxIoStatHis(generics.ListCreateAPIView):
 
 
 from rest_framework.decorators import api_view, permission_classes
-from django.http import HttpResponse, JsonResponse
-from db_monitor.celery import app
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
+from .models import LinuxStat
 
-
-@api_view(['GET'])
-def cloud_message(request):
-    result = sum.delay(1, 2)
-    print(result)
-    return HttpResponse(result)
-
-
-@app.task
-def sum(x, y):
-    print('输出到celery控制台的数据是：{}'.format(x+y))
-    return x+y
-
+@api_view(['DELETE'])
+# @permission_classes([IsAuthenticated])
+def del_linux_stat(request,host):
+    linux_stat = LinuxStat.objects.filter(host=host)
+    linux_stat.delete()
+    return Response({
+        'message': 'success'
+    })
 
