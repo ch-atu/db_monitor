@@ -25,6 +25,7 @@ class LinuxBase(object):
             ssh_client.connect(**self.params,allow_agent=False)
             print('----------')
             t = paramiko.Transport((self.hostname,int(self.port)))
+            t.banner_timeout = 30  # 修复连接中断的问题
             print(t)
             t.connect(username=self.username,password=self.password)
             sftp_client = paramiko.SFTPClient.from_transport(t)
