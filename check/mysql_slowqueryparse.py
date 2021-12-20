@@ -149,7 +149,7 @@ def get_mysql_slowquery(tags, mysql_params, linux_params):
     # get slowquery log content
     if slowquery_log:
         linux_oper = LinuxBase(linux_params)
-        slowquery_content = linux_oper.readfile(slowquery_log, seek=slowquery_log_seek)
+        slowquery_content = linux_oper.readfile(slowquery_log, seek=slowquery_log_seek, tags=tags)
         # parse log
         slowquery_log_seek = parse_mysql_slowquery_logs(tags, host, slowquery_content)
         # update alert log info to mysqlinfo

@@ -1,4 +1,6 @@
 # encoding : utf-8
+import re
+import time
 
 import paramiko
 
@@ -25,7 +27,7 @@ class LinuxBase(object):
             ssh_client.connect(**self.params,allow_agent=False)
             print('----------')
             t = paramiko.Transport((self.hostname,int(self.port)))
-            t.banner_timeout = 30  # 修复连接中断的问题
+            t.banner_timeout = 300  # 修复连接中断的问题
             print(t)
             t.connect(username=self.username,password=self.password)
             sftp_client = paramiko.SFTPClient.from_transport(t)
@@ -35,7 +37,7 @@ class LinuxBase(object):
             return None, None
     # read all of file content
 
-    def readfile(self,file,seek=0):
+    def readfile(self,file,seek=0, tags=None):
         _,sftp_client = self.connection()
         try:
             file_size = sftp_client.stat(file).st_size
@@ -50,7 +52,17 @@ class LinuxBase(object):
 
             yield b'', remote_file.tell()
         except Exception as e:
-            print("read file error")
+            print("读取文件错误！")
+            from utils.tools import mysql_exec
+            if re.findall('redis', file):
+                print("删除redis日志路径！")
+                print("删除成功")
+            if re.findall('mysql', file):
+                print("删除mysql慢查询日志路径！")
+                sql = "update mysql_list set slowquery_log='{}' where tags='{}' ".format('',tags)
+                mysql_exec(sql)
+                print("删除成功！")
+                # time.sleep(5)
             return None, None
 
     # read last n of file content
