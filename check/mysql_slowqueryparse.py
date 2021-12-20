@@ -173,4 +173,4 @@ if __name__ == '__main__':
         'username': 'ubuntu',
         'password': 'ch2020...'
     }
-    get_mysql_slowquery('腾讯云', mysql_params, linux_params)
+    # get_mysql_slowquery('腾讯云', mysql_params, linux_params)

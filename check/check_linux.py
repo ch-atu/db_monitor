@@ -129,4 +129,4 @@ if __name__ == '__main__':
         'username': 'ubuntu',
         'password': 'ch2020...'
     }
-    check_linux(tags=tags, linux_params=linux_params)
+    # check_linux(tags=tags, linux_params=linux_params)
