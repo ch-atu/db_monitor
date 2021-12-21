@@ -35,7 +35,10 @@ def get_log_level_redis(log_content):
     else:
         return "info"
 
+
 def parse_redis_logs(tags,host,log_stream):
+    log_stream_list = list(log_stream)
+    print('parse_redis_logs的log_stream长度：{}'.format(len(log_stream_list)))
     log_pos = 0
     log_meta = {}
     reg_date = re.compile('(\d{2} [a-zA-Z]{3} \d{2}:\d{2}:\d{2})')
@@ -93,6 +96,7 @@ def parse_redis_logs(tags,host,log_stream):
 
     return log_pos
 
+
 def get_redis_log(tags,redis_params,linux_params):
     host = redis_params['host']
     # logfile loglocation
@@ -109,7 +113,7 @@ def get_redis_log(tags,redis_params,linux_params):
     # get log content
     if log:
         linux_oper = LinuxBase(linux_params)
-        alert_content = linux_oper.readfile(log, seek=log_seek)
+        alert_content = linux_oper.readfile(log, seek=log_seek, tags=tags)
         # parse log
         log_seek = parse_redis_logs(tags, host, alert_content)
         # update alert log info to mysqlinfo

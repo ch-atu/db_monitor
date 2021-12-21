@@ -13,6 +13,7 @@ from datetime import datetime
 
 @timeout_decorator.timeout(30)
 def check_mysql(tags, mysql_params):
+    print('check_mysql开始执行！')
     check_time = datetime.now()
     host = mysql_params['host']
     port = mysql_params['port']
@@ -72,17 +73,19 @@ def check_mysql(tags, mysql_params):
         mysql_exec(insert_sql)
         archive_table(tags,'mysql_stat')
 
-        # 后台日志解析
-        get_mysql_alert(tags, mysql_params, linux_params)
+        # todo 不获取后台日志解析
+        # get_mysql_alert(tags, mysql_params, linux_params)
 
-        # 慢查询日志解析
-        get_mysql_slowquery(tags, mysql_params, linux_params)
+        # todo 不获取慢查询日志解析
+        # get_mysql_slowquery(tags, mysql_params, linux_params)
+        print('check_mysql执行结束')
     else:
         error_msg = "{}:mysql数据库连接失败".format(tags)
         checklog.logger.error(error_msg)
         checklog.logger.info('{}:写入mysql_stat采集数据'.format(tags))
         clear_table(tags, 'mysql_stat')
-        sql = "insert into mysql_stat(tags,host,port,status,check_time) values('{tags}','{host}',{port},1,'{check_time}')"
+        sql = ("insert into mysql_stat(tags,host,port,status,check_time) "
+               "values('{tags}','{host}',{port},1,'{check_time}')")
         sql = sql.format(**locals())
         mysql_exec(sql)
         archive_table(tags, 'mysql_stat')

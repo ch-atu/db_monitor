@@ -86,7 +86,7 @@ if __name__ == '__main__':
                 'password': each[4],
                 'user_os': each[5],
                 'password_os': each[6],
-                'sshport_os': each[7]            }
+                'sshport_os': each[7]}
             redis_check = Process(target=check_redis, args=(tags, redis_params))
             redis_check.start()
             check_pool.append(redis_check)

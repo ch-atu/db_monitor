@@ -11,6 +11,7 @@ import timeout_decorator
 
 @timeout_decorator.timeout(60)
 def check_redis(tags, redis_params):
+    print('check_redis开始执行！')
     check_time = now()
     host = redis_params['host']
     port = redis_params['port']
@@ -64,8 +65,9 @@ def check_redis(tags, redis_params):
         insert_sql = insert_data_sql.format(**insert_data_values)
         mysql_exec(insert_sql)
         archive_table(tags, 'redis_stat')
-        # 后台日志
-        get_redis_log(tags, redis_params, linux_params)
+        # todo 不获取后台日志
+        # get_redis_log(tags, redis_params, linux_params)
+        print('check_redis执行结束！')
     else:
         error_msg = "{}:Redis连接失败".format(tags)
         checklog.logger.error(error_msg)
@@ -77,14 +79,14 @@ def check_redis(tags, redis_params):
         archive_table(tags, 'oracle_stat')
 
 
-# if __name__ == '__main__':
-    # redis_params = {
-    #     'host': '119.29.139.149',
-    #     'port': 6379,
-    #     'password': '1234',
-    #     'version': '',
-    #     'sshport_os': 22,
-    #     'user_os': '',
-    #     'password_os': '1234'
-    # }
-    # check_redis('redis-6379', redis_params)
+if __name__ == '__main__':
+    redis_params = {
+        'host': '119.29.139.149',
+        'port': 6379,
+        'password': '1234',
+        'version': '',
+        'sshport_os': 22,
+        'user_os': 'ubuntu',
+        'password_os': 'ch2020...'
+    }
+    # check_redis('腾讯云', redis_params)

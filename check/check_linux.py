@@ -10,6 +10,7 @@ from datetime import datetime
 
 @timeout_decorator.timeout(30)
 def check_linux(tags, linux_params):
+    print('check_linux开始执行！')
     check_time = datetime.now()
     host = linux_params['hostname']
     port = linux_params['port']
@@ -104,6 +105,7 @@ def check_linux(tags, linux_params):
             insert_sql = insert_data_sql.format(**insert_data_values)
             mysql_exec(insert_sql)
         archive_table(tags,'linux_io_stat')
+        print('check_linux执行结束！')
     except Exception as e:
         error_msg = "{}:linux主机连接失败,{}" .format(tags, e)
         checklog.logger.error(error_msg)

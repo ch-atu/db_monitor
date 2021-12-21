@@ -668,10 +668,10 @@ class ApiAlarmInfo(generics.ListCreateAPIView):
     def get_queryset(self):
         tags = self.request.query_params.get('tags', None)
         if tags:
-            # result = AlarmInfo.objects.filter(tags=tags).order_by('-id')
+            result = AlarmInfo.objects.filter(tags=tags).order_by('-id')
             return AlarmInfo.objects.filter(tags=tags).order_by('-id')  # 倒序
         else:
-            return AlarmInfo.objects.all()
+            return AlarmInfo.objects.all().order_by('-id')  # 倒序
 
     serializer_class = AlarmInfoSerializer
     permission_classes = (permissions.DjangoModelPermissions,)
