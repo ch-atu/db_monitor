@@ -16,7 +16,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from utils.tools import mysql_django_query
 from rest_framework.renderers import JSONRenderer
-from system.tasks import oracle_rac_setup, oracle_rac_onenode_setup, oracle_onenode_setup, mysql_setup
+from system.tasks import mysql_setup
 
 logger = logging.getLogger('system')
 
@@ -39,7 +39,7 @@ class UserInfo(APIView):
             'token': token,
             'avatar': 'https://file.iviewui.com/dist/a0e88e83800f138b94d2414621bd9704.png'
         }
-        print(result)
+        # print('用户的信息为', result)
         return HttpResponse(json.dumps(result))
 
 
@@ -87,18 +87,6 @@ class Menu(APIView):
                 },
                 "component": 'Main',
                 "children": [
-                    # Oracle数据库
-                    {
-                        'path': 'oracle-list',
-                        'name': 'oracle-list',
-                        'meta': {
-                            'access': ['assets.view_oraclelist'],
-                            'icon': 'ios-menu',
-                            'title': 'Oracle数据库',
-                            'hideInMenu': 'true'
-                        },
-                        'component': 'assets/oracle-list'
-                    },
                     # MySQL数据库
                     {
                         'path': 'mysql-list',
@@ -144,18 +132,6 @@ class Menu(APIView):
                 },
                 "component": 'Main',
                 "children": [
-                    # Oracle列表
-                    {
-                        'path': 'oracle',
-                        'name': 'oracle',
-                        'meta': {
-                            'icon': 'ios-menu',
-                            'title': 'Oracle列表',
-                            'access': ['oracle.view_oraclestat'],
-                            'hideInMenu': 'true',
-                        },
-                        'component': 'oracle/stat-list'
-                    },
                     # MySQL列表
                     {
                         'path': 'mysql',
@@ -185,7 +161,7 @@ class Menu(APIView):
                         'meta': {
                             'icon': 'ios-menu',
                             'title': 'Linux列表',
-                            'access': ['oracle.view_oraclestat'],
+                            'access': ['linux.view_linuxstat'],
                         },
                         'component': 'linux/stat-list'
                     }
@@ -237,39 +213,6 @@ class Menu(APIView):
                 },
                 "component": 'Main',
                 "children": [
-                    # Oracle One Node
-                    {
-                        'path': 'oracle-onenode',
-                        'name': 'oracle-oennode',
-                        'meta': {
-                            'access': ['system.view_alarminfo'],
-                            'icon': 'ios-menu',
-                            'title': 'Oracle One Node'
-                        },
-                        'component': 'system/oracle-onenode-setup'
-                    },
-                    # Oracle RAC
-                    {
-                        'path': 'oracle-rac',
-                        'name': 'oracle-rac',
-                        'meta': {
-                            'access': ['system.view_alarminfo'],
-                            'icon': 'ios-menu',
-                            'title': 'Oracle RAC'
-                        },
-                        'component': 'system/oracle-rac-setup'
-                    },
-                    # Oracle RAC One Node
-                    {
-                        'path': 'oracle-rac-onenode',
-                        'name': 'oracle-rac-onenode',
-                        'meta': {
-                            'access': ['system.view_alarminfo'],
-                            'icon': 'ios-menu',
-                            'title': 'Oracle RAC One Node'
-                        },
-                        'component': 'system/oracle-rac-onenode-setup'
-                    },
                     # MySQL
                     {
                         'path': 'MySQL',
@@ -282,131 +225,6 @@ class Menu(APIView):
                         'component': 'system/mysql-setup'
                     }
                 ]
-            },
-            # oracle数据库监控
-            {
-                "path": '/oracle',
-                "name": 'Oracle',
-                "meta": {
-                    'hideInMenu': 'true',
-                    "icon": 'ios-apps',
-                    "title": 'Oracle数据库监控'
-                },
-                "component": 'Main',
-                "children": [
-                    # Oracle概览
-                    {
-                        'path': ':tags/view',
-                        'name': 'oracle-view',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': 'Oracle概览',
-                            'access': ['oracle.view_oraclestat'],
-                        },
-                        'component': 'oracle/view'
-                    },
-                    # 资源
-                    {
-                        'path': ':tags/resource',
-                        'name': 'oracle-resource',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '资源',
-                            'access': ['oracle.view_oracletablespace'],
-                        },
-                        'component': 'oracle/resource'
-                    },
-                    # 表空间
-                    {
-                        'path': ':tags/resource/tablespace/:tablespace_name',
-                        'name': 'oracle-tablespace',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '表空间',
-                            'access': ['oracle.view_oracletablespace'],
-                        },
-                        'component': 'oracle/tablespace'
-                    },
-                    # 临时表空间
-                    {
-                        'path': ':tags/resource/temptablespace/:tablespace_name',
-                        'name': 'oracle-temptablespace',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '临时表空间',
-                            'access': ['oracle.view_oracletablespace'],
-                        },
-                        'component': 'oracle/temp-tablespace'
-                    },
-                    # UNDO表空间
-                    {
-                        'path': ':tags/resource/undotablespace/:tablespace_name',
-                        'name': 'oracle-undotablespace',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': 'UNDO表空间',
-                            'access': ['oracle.view_oracletablespace'],
-                        },
-                        'component': 'oracle/undo-tablespace'
-                    },
-                    # 活动会话
-                    {
-                        'path': ':tags/active-session',
-                        'name': 'oracle-active-session',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '活动会话',
-                            'access': ['oracle.view_oraclestat'],
-                        },
-                        'component': 'oracle/active-session'
-                    },
-                    # 性能图
-                    {
-                        'path': ':tags/performance',
-                        'name': 'oracle-performance',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '性能图',
-                            'access': ['oracle.view_oraclestat'],
-                        },
-                        'component': 'oracle/performance'
-                    },
-                    # TOP SQL
-                    {
-                        'path': ':tags/top-sql',
-                        'name': 'oracle-top-sql',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': 'TOP SQL',
-                            'access': ['oracle.view_oraclestat'],
-                        },
-                        'component': 'oracle/top-sql'
-                    },
-                    # 日志解析
-                    {
-                        'path': ':tags/alert-log',
-                        'name': 'oracle-alertlog',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '日志解析',
-                            'access': ['oracle.view_oraclestat'],
-                        },
-                        'component': 'oracle/alert-log'
-                    },
-                    # 统计信息
-                    {
-                        'path': ':tags/table-stats',
-                        'name': 'oracle-tablestats',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '统计信息',
-                            'access': ['oracle.view_oraclestat'],
-                        },
-                        'component': 'oracle/table-stats'
-                    }
-
-                ],
-
             },
             # Linux主机监控
             {
@@ -498,28 +316,29 @@ class Menu(APIView):
                         },
                         'component': 'mysql/innodb'
                     },
-                    # 后台日志
-                    {
-                        'path': ':tags/alert-log',
-                        'name': 'mysql-alert-log',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '后台日志',
-                            'access': ['mysql.view_mysqlstat'],
-                        },
-                        'component': 'mysql/alert-log'
-                    },
-                    # 慢查询
-                    {
-                        'path': ':tags/slowquery-log',
-                        'name': 'mysql-slowquery-log',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '慢查询',
-                            'access': ['mysql.view_mysqlstat'],
-                        },
-                        'component': 'mysql/slowquery-log'
-                    }
+
+                    # # todo 后台日志
+                    # {
+                    #     'path': ':tags/alert-log',
+                    #     'name': 'mysql-alert-log',
+                    #     'meta': {
+                    #         'hideInMenu': 'true',
+                    #         'title': '后台日志',
+                    #         'access': ['mysql.view_mysqlstat'],
+                    #     },
+                    #     'component': 'mysql/alert-log'
+                    # },
+                    # # todo 慢查询
+                    # {
+                    #     'path': ':tags/slowquery-log',
+                    #     'name': 'mysql-slowquery-log',
+                    #     'meta': {
+                    #         'hideInMenu': 'true',
+                    #         'title': '慢查询',
+                    #         'access': ['mysql.view_mysqlstat'],
+                    #     },
+                    #     'component': 'mysql/slowquery-log'
+                    # }
                 ]
 
             },
@@ -567,17 +386,6 @@ class Menu(APIView):
                         },
                         'component': 'redis/config'
                     },
-                    # 慢查询分析
-                    {
-                        'path': ':tags/slowlog',
-                        'name': 'redis-slowlog',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '慢查询分析',
-                            'access': ['rds.view_redisstat'],
-                        },
-                        'component': 'redis/slowlog'
-                    },
                     # 连接信息
                     {
                         'path': ':tags/clientlist',
@@ -589,53 +397,45 @@ class Menu(APIView):
                         },
                         'component': 'redis/clientlist'
                     },
-                    # 命令曲线
-                    {
-                        'path': ':tags/commandstats',
-                        'name': 'redis-commandstats',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '命令曲线',
-                            'access': ['rds.view_redisstat'],
-                        },
-                        'component': 'redis/command-stats'
-                    },
-                    # 后台日志
-                    {
-                        'path': ':tags/alert-log',
-                        'name': 'redis-alert-log',
-                        'meta': {
-                            'hideInMenu': 'true',
-                            'title': '后台日志',
-                            'access': ['rds.view_redisstat'],
-                        },
-                        'component': 'redis/alert-log'
-                    },
+
+                    # todo 慢查询分析
+                    # {
+                    #     'path': ':tags/slowlog',
+                    #     'name': 'redis-slowlog',
+                    #     'meta': {
+                    #         'hideInMenu': 'true',
+                    #         'title': '慢查询分析',
+                    #         'access': ['rds.view_redisstat'],
+                    #     },
+                    #     'component': 'redis/slowlog'
+                    # },
+
+                    # # todo 命令曲线
+                    # {
+                    #     'path': ':tags/commandstats',
+                    #     'name': 'redis-commandstats',
+                    #     'meta': {
+                    #         'hideInMenu': 'true',
+                    #         'title': '命令曲线',
+                    #         'access': ['rds.view_redisstat'],
+                    #     },
+                    #     'component': 'redis/command-stats'
+                    # },
+
+                    # # todo 后台日志
+                    # {
+                    #     'path': ':tags/alert-log',
+                    #     'name': 'redis-alert-log',
+                    #     'meta': {
+                    #         'hideInMenu': 'true',
+                    #         'title': '后台日志',
+                    #         'access': ['rds.view_redisstat'],
+                    #     },
+                    #     'component': 'redis/alert-log'
+                    # },
                 ]
 
             }
-            # 多级菜单
-            # {
-            #     "path": '/multilevel',
-            #     "name": 'multilevel',
-            #     "meta": {
-            #         "icon": 'md-menu',
-            #         "title": '多级菜单'
-            #     },
-            #     "component": 'Main',
-            #     "children": [
-            #         {
-            #             "path": '/level_2_1',
-            #             "name": 'level_2_1',
-            #             "meta": {
-            #                 "icon": 'md-funnel',
-            #                 "title": '二级-1'
-            #             },
-            #             "component": 'multilevel/level-2-1'
-            #         },
-            #
-            #     ]
-            # },
         ]
         return HttpResponse(json.dumps(result))
 
@@ -687,65 +487,11 @@ class ApiAlarmInfoHis(generics.ListCreateAPIView):
 
 
 @api_view(['POST'])
-def ApiOracleRacSetup(request):
-    postBody = request.body
-    json_result = json.loads(postBody)
-    rac_info = json_result
-    node_list = [
-        {
-            'node_id': str(json_result['node1_id']),
-            'hostname': json_result['hostname'] + str(json_result['node1_id']),
-            'ip': json_result['node1_ip'],
-            'ip_vip': json_result['node1_vip'],
-            'ip_priv': json_result['node1_priv_ip'],
-            'password': json_result['node1_password']
-        },
-        {
-            'node_id': str(json_result['node2_id']),
-            'hostname': json_result['hostname'] + str(json_result['node2_id']),
-            'ip': json_result['node2_ip'],
-            'ip_vip': json_result['node2_vip'],
-            'ip_priv': json_result['node2_priv_ip'],
-            'password': json_result['node2_password']
-        },
-    ]
-    module = json_result['module']
-    oracle_rac_setup.delay(rac_info, node_list, module)
-    # oracleracinstall = OracleRacInstall(rac_info, node_list)
-    # oracleracinstall.do_rac_install(module)
-    return HttpResponse('success!')
-
-
-@api_view(['POST'])
-def ApiOracleRacOneNodeSetup(request):
-    postBody = request.body
-    json_result = json.loads(postBody)
-    node_info = json_result
-    # print(json_result)
-    module = json_result['module']
-    oracle_rac_onenode_setup.delay(node_info, module)
-    # oracleracinstall = OracleRacInstall(rac_info, node_list)
-    # oracleracinstall.do_rac_install(module)
-    return HttpResponse('success!')
-
-
-@api_view(['POST'])
-def ApiOracleOneNodeSetup(request):
-    postBody = request.body
-    json_result = json.loads(postBody)
-    node_info = json_result
-    # print(json_result)
-    module = json_result['module']
-    oracle_onenode_setup.delay(node_info, module)
-    return HttpResponse('success!')
-
-
-@api_view(['POST'])
 def ApiMysqlSetup(request):
     postBody = request.body
     json_result = json.loads(postBody)
     node_info = json_result
-    print(json_result)
+    # print(json_result)
     mysql_setup.delay(node_info)
     return HttpResponse('success!')
 

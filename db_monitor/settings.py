@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_swagger',
     'assets.apps.AssetsConfig',
-    'oracle.apps.OracleConfig',
     'linux.apps.LinuxConfig',
     'mysql.apps.MysqlConfig',
     'rds.apps.RdsConfig',

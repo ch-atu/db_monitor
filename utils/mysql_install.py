@@ -146,15 +146,3 @@ class MysqlInstall():
         self.mysql_initialize(linux_conn, linux_params)
 
 
-if __name__ == '__main__':
-    node_info = {
-        'node_ip': '192.168.48.51',
-        'hostname': 'cispdg',
-        'dbname': 'cispcdb',
-        'pdbname': 'cisp',
-        'password': 'oracle',
-    }
-
-    oracleracinstall = OracleOneNodeInstall(node_info)
-    # oracleracinstall.clear_rac()
-    oracleracinstall.do_rac_install('linux')

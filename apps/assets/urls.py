@@ -5,8 +5,6 @@ from django.conf.urls import url
 app_name = "assets"
 
 urlpatterns = [
-    path('api/oracle', views.ApiOracleList.as_view()),
-    path('api/oracle/<int:pk>', views.ApiOracleDetail.as_view()),
     path('api/mysql', views.ApiMysqlList.as_view()),
     path('api/mysql/<int:pk>', views.ApiMysqlDetail.as_view()),
     path('api/linux', views.ApiLinuxList.as_view()),

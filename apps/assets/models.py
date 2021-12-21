@@ -3,62 +3,6 @@ from django.db import models
 
 # Create your models here.
 
-# oracle监控列表
-class OracleList(models.Model):
-
-    DB_VERSION = [
-        ('Oracle11g','Oracle11g'),
-        ('Oracle12c', 'Oracle12c'),
-    ]
-
-    ALARM_CHOICES = [
-        (0,'启用'),
-        (1,'禁用')
-    ]
-
-    tags = models.CharField("标签",max_length=32,unique=True)
-    host = models.CharField("主机ip",max_length=32)
-    port = models.IntegerField("数据库端口号",default=1521)
-    service_name = models.CharField("数据库服务名",max_length=255)
-    db_version = models.CharField("数据库版本",max_length=32,choices=DB_VERSION)
-    dbname = models.CharField("数据库名",max_length=255,blank=True,null=True)
-    instance_name = models.CharField("实例名",max_length=255,blank=True,null=True)
-    db_vip = models.CharField("vip地址",max_length=255,blank=True,null=True)
-    db_loc = models.CharField("安装地址",max_length=255,blank=True,null=True)
-    bussiness_system = models.CharField("业务系统",max_length=255,blank=True,null=True)
-    system_level = models.IntegerField("系统等级 0:核心系统 1:重要系统 2:一般系统",default=0)
-    res_description = models.CharField("资源描述",max_length=255,blank=True,null=True)
-    main_dbuser = models.CharField("主要数据库用户",max_length=255,blank=True,null=True)
-    db_user = models.CharField("数据库用户名",max_length=32)
-    db_password = models.CharField("数据库用户密码",max_length=255)
-    service_name_cdb = models.CharField("数据库服务名(cdb)", max_length=255, blank=True,null=True)
-    db_user_cdb = models.CharField("数据库用户名(cdb)", max_length=32, blank=True,null=True)
-    db_password_cdb = models.CharField("数据库用户密码(cdb) ", max_length=255, blank=True,null=True)
-    linux_tags = models.CharField("所在linux主机标签",max_length=32,blank=True,null=True)
-    alarm_connect = models.IntegerField("通断告警",default=1)
-    alarm_tablespace = models.IntegerField("表空间告警",default=1)
-    alarm_undo_tablespace = models.IntegerField("undo表空间告警",default=1)
-    alarm_temp_tablespace = models.IntegerField("temp表空间告警",default=1)
-    alarm_process = models.IntegerField("连接数告警",default=1)
-    alarm_pga = models.IntegerField("pga告警",default=1)
-    alarm_archive = models.IntegerField("归档使用率告警",default=1)
-    alarm_adg = models.IntegerField("adg延迟告警",default=1)
-    alarm_alert_log = models.IntegerField("后台日志告警",default=1)
-    alarm_lock = models.IntegerField("锁异常告警",default=1)
-    alarm_invalid_index = models.IntegerField("失效索引告警",default=1)
-    alarm_expired_password = models.IntegerField("密码过期告警",default=1)
-    alarm_wait_events = models.IntegerField("综合性能告警",default=1)
-    alert_log = models.CharField("后台日志路径",max_length=256,blank=True,null=True)
-    alert_log_seek = models.IntegerField("后台日志偏移量",blank=True,null=True)
-
-    def __str__(self):
-        return self.tags
-
-    class Meta:
-        db_table = 'oracle_list'
-        verbose_name = "Oracle数据库"
-        verbose_name_plural = verbose_name
-
 # mysql监控列表
 class MysqlList(models.Model):
 

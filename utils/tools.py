@@ -99,27 +99,6 @@ def get_redis_params(tags):
     }
 
 
-def get_oracle_params(tags):
-    sql = "select t1.tags,t1.host,t1.port,t1.service_name,t1.db_user,t1.db_password,t1.db_user_cdb,t1.db_password_cdb,t1.service_name_cdb," \
-          "t2.user,t2.password,t2.sshport,t1.db_version from oracle_list t1 inner join linux_list t2  on t1.linux_tags=t2.tags where t1.tags='{}' ".format(
-        tags)
-    res = mysql_query(sql)[0]
-    return {
-        'host': res[1],
-        'port': res[2],
-        'service_name': res[3],
-        'user': res[4],
-        'password': res[5],
-        'user_cdb': res[6],
-        'password_cdb': res[7],
-        'service_name_cdb': res[8],
-        'user_os': res[9],
-        'password_os': res[10],
-        'sshport_os': res[11],
-        'db_version': res[12]
-    }
-
-
 def get_memtotal(host, password):
     linux_params = {
         'hostname': host,
