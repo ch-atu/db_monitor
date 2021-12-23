@@ -44,11 +44,18 @@ class ApiLinuxStatHis(generics.ListCreateAPIView):
 
 # all instance
 class ApiLinuxStatList(generics.ListCreateAPIView):
-    queryset = LinuxStat.objects.get_queryset().order_by('-status')
+    # queryset = LinuxStat.objects.get_queryset().order_by('-status')
+    # 模糊查询
+    def get_queryset(self):
+        host = self.request.query_params.get('host', None)
+        if not host:
+            return LinuxStat.objects.all().order_by('id')
+        hosts = LinuxStat.objects.filter(host__contains=host).order_by('id')
+        return hosts
     serializer_class = LinuxStatSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ('tags', 'host', 'status')
-    search_fields = ('tags', 'host',)
+    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    # filter_fields = ('tags', 'host', 'status')
+    # search_fields = ('tags', 'host',)
     permission_classes = (permissions.DjangoModelPermissions,)
 
 

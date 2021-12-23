@@ -43,11 +43,18 @@ class ApiMysqlStatHis(generics.ListCreateAPIView):
 
 # all instance
 class ApiMysqlStatList(generics.ListCreateAPIView):
-    queryset = MysqlStat.objects.get_queryset().order_by('-id')
+    # queryset = MysqlStat.objects.get_queryset().order_by('-id')
+    # 模糊查询
+    def get_queryset(self):
+        host = self.request.query_params.get('host', None)
+        if not host:
+            return MysqlStat.objects.all().order_by('id')
+        hosts = MysqlStat.objects.filter(host__contains=host).order_by('id')
+        return hosts
     serializer_class = MysqlStatSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ('tags', 'host', 'status')
-    search_fields = ('tags', 'host',)
+    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    # filter_fields = ('tags', 'host', 'status')
+    # search_fields = ('tags', 'host',)
     permission_classes = (permissions.DjangoModelPermissions,)
 
 

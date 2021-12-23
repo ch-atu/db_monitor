@@ -457,11 +457,18 @@ class ApiAlertLog(generics.ListAPIView):
 
 
 class ApiAlarmConf(generics.ListCreateAPIView):
-    queryset = AlarmConf.objects.get_queryset().order_by('-type')
+    # queryset = AlarmConf.objects.get_queryset().order_by('-type')
+    # 模糊查询
+    def get_queryset(self):
+        name = self.request.query_params.get('name', None)
+        if not name:
+            return AlarmConf.objects.all().order_by('-type')
+        alarm_confs = AlarmConf.objects.filter(name__icontains=name).order_by('-type')
+        return alarm_confs
     serializer_class = AlarmConfSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ('type', 'name',)
-    search_fields = ('type', 'name',)
+    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    # filter_fields = ('type', 'name',)
+    # search_fields = ('type', 'name',)
     permission_classes = (permissions.DjangoModelPermissions,)
 
 
