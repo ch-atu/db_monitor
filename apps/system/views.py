@@ -19,6 +19,7 @@ from django.db.models import Q
 from rest_framework import permissions
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -484,7 +485,7 @@ class ApiAlarmInfo(generics.ListCreateAPIView):
     permission_classes = (permissions.DjangoModelPermissions,)
 
 
-# 日志导出
+# 告警信息查询
 class ApiExportAlarmInfo(generics.ListAPIView):
     def get_queryset(self):
         alarm_info = []
@@ -553,6 +554,51 @@ class ApiExportAlarmInfo(generics.ListAPIView):
     serializer_class = AlarmInfoSerializer
 
 
+# 日志导出
+class ApiExcelAlarmInfo(APIView):
+    def get(self, request):
+        day_field = request.query_params.get('day', None)
+        if day_field == '1':
+            # 获取今天零点到查询时刻的告警信息
+            zero_today, now = get_zero_time(0)
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_today,
+                                                  alarm_time__lte=now
+                                                  ).order_by('-alarm_time')
+        elif day_field == '-1':
+            # 获取昨天的00:00:00点到23:59:59
+            zero_yesterday, now = get_zero_time(abs(int(day_field)))
+            last_yesterday = zero_yesterday + timedelta(hours=23, minutes=59, seconds=59)
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_yesterday,
+                                                  alarm_time__lte=last_yesterday
+                                                  ).order_by('-alarm_time')
+        elif day_field == '-7':
+            # 获取7天前的00:00:00
+            zero_seven, now = get_zero_time(abs(int(day_field)))
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_seven,
+                                                  alarm_time__lte=now
+                                                  ).order_by('-alarm_time')
+        elif day_field == '-30':
+            # 获取30天前的00:00:00
+            zero_thirty, now = get_zero_time(abs(int(day_field)))
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_thirty,
+                                                  alarm_time__lte=now
+                                                  ).order_by('-alarm_time')
+        elif day_field == '-365':
+            # 获取一年前的00:00:00
+            zero_before_year, now = get_zero_time(abs(int(day_field)))
+
+            alarm_info = AlarmInfo.objects.filter(alarm_time__gte=zero_before_year,
+                                                  alarm_time__lte=now
+                                                  ).order_by('-alarm_time')
+
+        serialize = AlarmInfoSerializer(instance=alarm_info, many=True)
+        return Response(serialize.data)
+
+
 class ApiAlarmInfoHis(generics.ListCreateAPIView):
     queryset = AlarmInfo.objects.get_queryset().order_by('-id')
     serializer_class = AlarmInfoSerializer
@@ -580,11 +626,3 @@ def ApiSetupLog(request):
     serializer = SetupLogSerializer(setup_log_list, many=True)
     json = JSONRenderer().render(serializer.data)
     return HttpResponse(json)
-
-
-
-
-
-
-
-
