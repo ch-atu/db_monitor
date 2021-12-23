@@ -2,6 +2,7 @@
 
 from rest_framework.pagination import PageNumberPagination
 
+
 class NoPagination(PageNumberPagination):
     page_size = 99999 # 表示每页的默认显示数量
     page_size_query_param = 'page_size' # 表示url中每页数量参数

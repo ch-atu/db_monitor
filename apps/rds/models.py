@@ -27,7 +27,7 @@ class RedisStat(models.Model):
     command_count = models.IntegerField("执行命令次数(实时)",blank=True,null=True)
     net_input_byte = models.FloatField(blank=True, null=True)
     net_out_byte = models.FloatField(blank=True, null=True)
-    aof_delayed_fsync = models.FloatField("")
+    aof_delayed_fsync = models.FloatField(blank=True,null=True)
     cmdstat_brpop = models.FloatField(blank=True, null=True)
     cmdstat_publish = models.FloatField(blank=True, null=True)
     cmdstat_setnx = models.FloatField(blank=True, null=True)

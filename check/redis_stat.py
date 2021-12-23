@@ -96,14 +96,15 @@ class RedisStat(object):
         self.last_time = time.time()
         self.loop_cnt += 1
 
-if __name__ == "__main__":
-    redis_conn = redis.StrictRedis(host='192.168.48.60', port=6379)
-    the_redis = RedisStat(redis_conn)
-    the_redis.get_redis_stat()
-    time.sleep(1)
-    the_redis.get_redis_stat()
-    the_redis.get_redis_config()
-    redis_data = the_redis.res
+
+# if __name__ == "__main__":
+#     redis_conn = redis.StrictRedis(host='192.168.48.60', port=6379)
+#     the_redis = RedisStat(redis_conn)
+#     the_redis.get_redis_stat()
+#     time.sleep(1)
+#     the_redis.get_redis_stat()
+#     the_redis.get_redis_config()
+#     redis_data = the_redis.res
 
 
 

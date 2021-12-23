@@ -1,4 +1,5 @@
 # encoding:utf-8
+import time
 
 from check.check_linux import check_linux
 from check.check_mysql import check_mysql
@@ -74,5 +75,7 @@ def checkall():
     # 告警
     check_alarm()
 
-# checkall()
+
+# if __name__=='__main__':
+#     checkall()
 

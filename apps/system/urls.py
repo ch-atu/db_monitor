@@ -15,5 +15,5 @@ urlpatterns = [
     path('api/mysql-setup', views.ApiMysqlSetup),
     path('api/setup-log', views.ApiSetupLog),
     # 新增日志导出
-    path('api/export-alarm-info', views.ExportAlarmInfo)
+    path('api/export-alarm-info', views.ApiExportAlarmInfo.as_view())
 ]
