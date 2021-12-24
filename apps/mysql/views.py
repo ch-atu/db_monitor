@@ -4,6 +4,8 @@ from .models import *
 from rest_framework import permissions
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import *
 from utils.tools import get_utctime, today, last_day
@@ -67,8 +69,14 @@ class ApiMysqlSlowquery(generics.ListCreateAPIView):
     permission_classes = (permissions.DjangoModelPermissions,)
 
 
-
-
+# 级联删除
+@api_view(['DELETE'])
+def del_mysql_stat(request, host):
+    mysql_stat = MysqlStat.objects.filter(host=host)
+    mysql_stat.delete()
+    return Response({
+        'message': 'success'
+    })
 
 
 

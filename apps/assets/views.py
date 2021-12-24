@@ -75,11 +75,4 @@ class ApiRedisDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.DjangoModelPermissions,)
 
 
-# from check import alarm
-# from django.http import HttpResponse
-# from django.views import View
-# class Test_alarm(View):
-#     def get(self, quest):
-#         alarm.check_alarm()
-#         return HttpResponse('success')
 

@@ -5,6 +5,7 @@ from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import *
 from utils.tools import *
@@ -129,3 +130,12 @@ def ApiRedisImmediateStats(request):
         'Commandstats':redis_conn.info('Commandstats')
     }
     return HttpResponse(json.dumps(redis_info_all))
+
+
+@api_view(['DELETE'])
+def del_redis_stat(request, host):
+    redis_stat = RedisStat.objects.filter(host=host)
+    redis_stat.delete()
+    return Response({
+        'message': 'success'
+    })
