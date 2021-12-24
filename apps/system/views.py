@@ -564,8 +564,9 @@ class ApiExportAlarmInfo(generics.ListAPIView):
 # 日志导出
 class ApiExcelAlarmInfo(APIView):
     def get(self, request):
+        alarm_info = None
         day_field = request.query_params.get('day', None)
-        if day_field == '1':
+        if day_field == '1' or day_field == 'NaN':
             # 获取今天零点到查询时刻的告警信息
             zero_today, now = get_zero_time(0)
 
