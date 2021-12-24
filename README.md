@@ -18,7 +18,7 @@
     
 ## 环境
 
-- Python 3.6
+- Python 3.9
     - Django 2.2
     - Django Rest Framework 3.1
     
@@ -59,7 +59,8 @@ pip install -r requirements.txt
 --Redis：
 
 >CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
-CELERY_BROKER_URL = 'redis://localhost:6379/2'
+
+>CELERY_BROKER_URL = 'redis://localhost:6379/2'
 
 
 #### 7.创建数据库
