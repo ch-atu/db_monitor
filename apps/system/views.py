@@ -94,16 +94,27 @@ class Menu(APIView):
                 },
                 "component": 'Main',
                 "children": [
-                    # MySQL数据库
+                    # MySQL
                     {
                         'path': 'mysql-list',
                         'name': 'mysql-list',
                         'meta': {
                             'access': ['assets.view_mysqllist'],
                             'icon': 'ios-menu',
-                            'title': 'MySQL数据库'
+                            'title': 'MySQL'
                         },
                         'component': 'assets/mysql-list'
+                    },
+                    # Redis
+                    {
+                        'path': 'redis-list',
+                        'name': 'redis-list',
+                        'meta': {
+                            'access': ['assets.view_redislist'],
+                            'icon': 'ios-menu',
+                            'title': 'Redis'
+                        },
+                        'component': 'assets/redis-list'
                     },
                     # Linux主机
                     {
@@ -116,22 +127,22 @@ class Menu(APIView):
                         },
                         'component': 'assets/linux-list'
                     },
-                    # Redis
+                    # windows主机
                     {
-                        'path': 'redis-list',
-                        'name': 'redis-list',
+                        'path': 'windows-list',
+                        'name': 'windows-list',
                         'meta': {
-                            'access': ['assets.view_redislist'],
                             'icon': 'ios-menu',
-                            'title': 'Redis'
+                            'title': 'windows主机',
+                            # 'access': ['assets.view_windowslist']
                         },
-                        'component': 'assets/redis-list'
-                    }
+                        'component': 'assets/windows-list'
+                    },
                 ]
             },
             # 实例列表
             {
-                "path": '/monlist',
+                "path": '/ins_list',
                 "name": '实例列表',
                 "meta": {
                     "icon": 'ios-apps',
@@ -171,7 +182,18 @@ class Menu(APIView):
                             'access': ['linux.view_linuxstat'],
                         },
                         'component': 'linux/stat-list'
-                    }
+                    },
+                    # Windows列表
+                    {
+                        'path': 'windows',
+                        'name': 'windows',
+                        'meta': {
+                            'icon': 'ios-menu',
+                            'title': 'Windows列表',
+                            # 'access': ['linux.view_windowsstat'],
+                        },
+                        'component': 'windows/stat-list'
+                    },
                 ],
 
             },
@@ -277,6 +299,30 @@ class Menu(APIView):
                         },
                         'component': 'linux/memory'
                     }
+                ]
+            },
+            # Windows主机监控
+            {
+                "path": '/windows',
+                "name": 'Windows',
+                "meta": {
+                    'hideInMenu': 'true',
+                    "icon": 'ios-apps',
+                    "title": 'Windows主机监控'
+                },
+                "component": 'Main',
+                "children": [
+                    # Windows概览
+                    {
+                        'path': ':tags/view',
+                        'name': 'windows-view',
+                        'meta': {
+                            'hideInMenu': 'true',
+                            'title': 'windows概览',
+                            'access': ['windows.view_linuxstat'],
+                        },
+                        'component': 'windows/view'
+                    },
                 ]
             },
             # MySQL数据库监控
